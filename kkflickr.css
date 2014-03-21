@@ -1,0 +1,86 @@
+
+
+#kkflickr_progress
+{
+    font-family: sans, sans-serif;
+}
+
+#kkflickr_progress,
+#kkflickr_progress *
+{
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+._kkf
+{
+    background-color: white;
+    position: relative;
+    margin-bottom: 0.5em;
+    font-size: 16px;
+}
+
+._kkf span
+{
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom:0;
+}
+
+#kkflickr_progress .title
+{
+    right: 30%;
+    left: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    z-index: 2;
+    padding-left: 0.5em;
+}
+
+#kkflickr_progress .status
+{
+    left: 70%;
+    right: 0;
+    z-index: 2;
+    text-align: right;
+    padding-right: 0.5em;
+}
+
+#kkflickr_progress .progress
+{
+    left: 0;
+    right: 0;
+    z-index: 1;
+    width: 100%;
+}
+
+#kkflickr_upload_btn
+{
+    position:relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#kkflickr_upload_btn .label
+{
+    display:inline-block;
+    border-radius:8px;
+    border:#ebebeb solid 1px;
+    padding: 4px 6px 4px 8px;
+    color: #7f7f7f;
+    margin-top: 2px;
+    background:white
+}
+
+#kkflickrUploadInput
+{
+    -webkit-appearance:none;
+    position:absolute;
+    top:0;
+    left:0;
+    bottom: 0;
+    right: 0;
+    opacity:0;
+}

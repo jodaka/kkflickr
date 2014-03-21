@@ -3,14 +3,15 @@
 
   "name": "KKF flickr uploader",
   "description": "KKF",
-  "version": "0.1",
+  "version": "1.0",
   "permissions": [
     "http://*/*"
   ],
   "content_scripts": [
     {
-      "matches": [ "http://kitchenknifeforums.com/*", "file://*", "http://gitdev:81/*" ],
-      "js": [ "jquery-2.1.0.js", "md5.js", "flickr.js" ]
+      "matches": [ "http://*.kitchenknifeforums.com/*", "file://*", "http://gitdev:81/*" ],
+      "js": [ "jquery-2.1.0.js", "md5.js", "flickr.js" ],
+      "css" : [ "kkflickr.css"]
       }
     ]
 }
