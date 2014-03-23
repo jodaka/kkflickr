@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "KKF flickr uploader",
-  "description": "KKF",
-  "version": "1.0",
+  "name": "KKFlickr",
+  "description": "KKFlickr would allow you to insert pictures from local computer to http://kitchenknifeforums.com with just few easy clicks",
+  "version": "1.1",
   "permissions": [
     "http://*.kitchenknifeforums.com/*",
     "http://*.flickr.com/*",
