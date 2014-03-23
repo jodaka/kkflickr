@@ -1,4 +1,4 @@
-/*global CryptoJS, CKEDITOR, chrome */
+/*global CryptoJS, chrome */
 
 console.warn( '------------- flickr api loaded --------------' );
 
@@ -9,7 +9,8 @@ console.warn( '------------- flickr api loaded --------------' );
     var cfg = {
         key: '1214d981477adc7e17d5c50ee0eef5bd',
         secret: '3db6fbef55dbdda6',
-        baseURL: 'http://flickr.com/services/'
+        baseURL: 'http://flickr.com/services/',
+        textareaSelector: '.texteditor textarea[role="textbox"]'
     };
 
     var settings = {};
@@ -21,12 +22,13 @@ console.warn( '------------- flickr api loaded --------------' );
      */
     var injectKKFcode = function( attempts ) {
 
-        var e = document.getElementById( 'cke_vB_Editor_QR_editor' );
+        var e = document.getElementsByClassName( 'editor' )[0];
+        var holder = document.querySelector( '.editor .cke_toolbox' );
 
-        if ( e === null ) {
+        if ( typeof e === 'undefined' || holder === null ) {
 
             if ( typeof attempts === 'undefined' ) {
-                attempts = 3;
+                attempts = 5;
             } else {
                 attempts -= 1;
             }
@@ -38,7 +40,7 @@ console.warn( '------------- flickr api loaded --------------' );
             // console.log( ' CANT FIND cke_vB_Editor_QR_editor ', e );
             setTimeout( function() {
                 injectKKFcode( attempts );
-            }, 2500 );
+            }, 1500 );
 
             return;
         }
@@ -50,7 +52,7 @@ console.warn( '------------- flickr api loaded --------------' );
         e.parentNode.insertBefore( progressHolder, e );
 
         // toolbar button
-        var holder = document.querySelector( '#cke_top_vB_Editor_QR_editor .cke_toolbox' );
+
         var toolbar = document.createElement( 'span' );
         toolbar.setAttribute( 'class', 'cke_toolbar' );
         toolbar.innerHTML =
@@ -110,7 +112,7 @@ console.warn( '------------- flickr api loaded --------------' );
     var requestFrob = function() {
         localStorage.setItem( 'kkflickr_frobRequestURL', location.href );
 
-        var textarea = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
+        var textarea = document.querySelector( cfg.textareaSelector );
         if ( textarea ) {
             localStorage.setItem( 'kkflickr_savedText', textarea.value );
         }
@@ -245,7 +247,7 @@ console.warn( '------------- flickr api loaded --------------' );
 
     var toggleEditorMode = function( sourceMode ) {
 
-        var editor = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
+        var editor = document.querySelector( cfg.textareaSelector );
 
         if ( sourceMode && !editor ) {
             cfg.restoreSourceMode = true;
@@ -347,7 +349,7 @@ console.warn( '------------- flickr api loaded --------------' );
 
         updateProgress( id, 'DONE' );
 
-        var resultHolder = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
+        var resultHolder = document.querySelector( cfg.textareaSelector );
 
         var img = '[IMG]' + url + '[/IMG]';
         if (settings.allowFullSize && typeof source !== 'undefined' && source !== '' ) {
@@ -547,8 +549,8 @@ console.warn( '------------- flickr api loaded --------------' );
                 var savedText = localStorage.getItem( 'kkflickr_savedText' );
                 if ( savedText ) {
                     localStorage.setItem( 'kkflickr_savedText', null );
-                    var textarea = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
-                    if ( textarea && textarea.value === '' ) {
+                    var textarea = document.querySelector( cfg.textareaSelector );
+                    if ( textarea && textarea.value === '' && savedText !== null && savedText !== 'null' ) {
                         textarea.value = savedText;
                     }
                 }
@@ -577,7 +579,6 @@ console.warn( '------------- flickr api loaded --------------' );
         isPrivate: '1'
 
     }, function( newConfig ) {
-        console.log( 111, 'GOT SETTINGS', newConfig );
         settings = newConfig;
     } );
 
