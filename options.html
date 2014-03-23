@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="chrome-bootstrap.css" />
+  <style type="text/css">
+  .chrome-bootstrap ul.tags li
+  {
+    margin-right: 15px;
+  }
+  </style>
+</head>
+<body class="chrome-bootstrap">
+  <div class="frame">
+    <div class="mainview view">
+      <div id="typography" class="selected">
+        <header>
+          <h1>KKFlickr options</h1>
+        </header>
+        <div class="content">
+          <h2 style="margin-top: 45px">Tags</h2>
+          <p>You can supply as many tags as you want. They will be added to all the photos you upload. Default: KKF</p>
+          <div style="margin-top: 10px;">
+            <input type="text" id="addTagInput" /> <button id="addTagButton">Add tag</button>
+          </div>
+          <ul class="tags" id="tags_list">
+              <li data-tag="kkf"> KKF
+                <a href="#" class="delete"></a>
+              </li>
+          </ul>
+
+          <h2 style="margin-top: 45px">Pictures size</h2>
+          <div class="radio">
+            <label>
+              <input type="radio" name="pictureSize" value="640"> <span>Normal 640px width (default)</span>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="pictureSize" value="800"> <span>Bigger 800px width</span>
+            </label>
+          </div>
+
+          <p>If you upload picture which width is below selected option, it will be inserted without resizing.</p>
+
+          <div class="checkbox" style="margin-top: 25px">
+            <label>
+              <input type="checkbox" id="allowFullSize" name="allowFullSize">
+              <span>Allow clicking images to view full size versions</span>
+            </label>
+          </div>
+
+          <h2 style="margin-top: 45px">Privacy</h2>
+          <div class="radio">
+            <label>
+              <input type="radio" name="isPrivate" value="1" checked="checked"> <span>Private</span>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="isPrivate" value="0"> <span>Public</span>
+            </label>
+          </div>
+          <p>All uploaded pictures would be marked as "hidden" and would not appear in public searches. However you can show them in your photostream using "Public" settings, or keep them visible only to you (default option).
+
+          <p style="margin-top: 50px">Settings are saved automatically</p>
+<!--           <p>Praesent porttitor imperdiet iaculis. Duis vel placerat lectus. Vivamus ante enim, ultrices id accumsan id, mollis in nunc. Cras volutpat dolor vel metus mattis at mattis nisi blandit. Donec sollicitudin, sapien ut lacinia viverra, massa sapien gravida ante, ac lobortis turpis justo eu felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam porta risus quis nisl sodales eu euismod neque pulvinar. Ut et dolor ante. Cras dapibus dolor non metus eleifend ornare.</p>
+          <a href="#">This is a link</a>
+ -->        </div>
+      </div>
+
+  </div>
+  <script type="text/javascript" src="options.js"></script>
+</body>
+</html>

@@ -6,13 +6,15 @@
   "version": "1.0",
   "permissions": [
     "http://*.kitchenknifeforums.com/*",
-    "http://*.flickr.com/*"
+    "http://*.flickr.com/*",
+    "storage"
   ],
   "content_scripts": [
     {
       "matches": [ "http://*.kitchenknifeforums.com/*" ],
       "js": [ "md5.js", "flickr.js" ],
-      "css" : [ "kkflickr.css"]
+      "css": [ "kkflickr.css" ]
       }
-    ]
+  ],
+  "options_page": "options.html"
 }
