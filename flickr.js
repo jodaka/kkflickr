@@ -113,7 +113,7 @@ console.warn( '------------- flickr api loaded --------------' );
         localStorage.setItem( 'kkflickr_frobRequestURL', location.href );
 
         var textarea = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
-        if (textarea) {
+        if ( textarea ) {
             localStorage.setItem( 'kkflickr_savedText', textarea.value );
         }
 
@@ -160,7 +160,7 @@ console.warn( '------------- flickr api loaded --------------' );
 
             var parent = document.getElementById( 'kkflickr_progress' );
             parent.appendChild( holder );
-            document.getElementById('kkflickr_loading_holder').style.display = 'block';
+            document.getElementById( 'kkflickr_loading_holder' ).style.display = 'block';
 
         } else {
 
@@ -234,12 +234,29 @@ console.warn( '------------- flickr api loaded --------------' );
         xhr.send( formData );
     };
 
+    var toggleEditorMode = function( sourceMode ) {
+
+        var editor = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
+
+        if ( sourceMode && !editor ) {
+            cfg.restoreSourceMode = true;
+            document.querySelector( '.cke_button_enhancedsource' ).click();
+        }
+
+        if ( !sourceMode && editor ) {
+            document.querySelector( '.cke_button_enhancedsource' ).click();
+            delete cfg.restoreSourceMode;
+        }
+
+    };
 
     /**
      * [ description]
      * @return {[type]} [description]
      */
     var uploadDialog = function() {
+
+        toggleEditorMode( true );
 
         var photos = document.getElementById( 'kkflickrUploadInput' ).files;
 
@@ -328,8 +345,11 @@ console.warn( '------------- flickr api loaded --------------' );
                 var parent = holder.parentNode;
                 parent.removeChild( holder );
 
-                if (parent.childNodes.length === 1 ) {
-                    document.getElementById('kkflickr_loading_holder').style.display = 'none';
+                if ( parent.childNodes.length === 1 ) {
+                    document.getElementById( 'kkflickr_loading_holder' ).style.display = 'none';
+                    if ( cfg.restoreSourceMode ) {
+                        toggleEditorMode();
+                    }
                 }
 
             }
@@ -504,11 +524,11 @@ console.warn( '------------- flickr api loaded --------------' );
                 showButton( 'kkflickr_upload_btn' );
 
                 // restoring saved value if any
-                var savedText = localStorage.getItem( 'kkflickr_savedText');
-                if (savedText) {
-                    localStorage.setItem( 'kkflickr_savedText', null);
+                var savedText = localStorage.getItem( 'kkflickr_savedText' );
+                if ( savedText ) {
+                    localStorage.setItem( 'kkflickr_savedText', null );
                     var textarea = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
-                    if (textarea && textarea.value === '') {
+                    if ( textarea && textarea.value === '' ) {
                         textarea.value = savedText;
                     }
                 }
