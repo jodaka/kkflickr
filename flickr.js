@@ -1,4 +1,4 @@
-/*global CryptoJS, $, CKEDITOR */
+/*global CryptoJS, CKEDITOR */
 
 console.warn( '------------- flickr api loaded --------------' );
 
@@ -23,55 +23,53 @@ console.warn( '------------- flickr api loaded --------------' );
      */
     var injectKKFcode = function( attempts ) {
 
-        var e = document.getElementById('cke_vB_Editor_QR_editor');
+        var e = document.getElementById( 'cke_vB_Editor_QR_editor' );
 
         if ( e === null ) {
 
-            if (typeof attempts === 'undefined' ) {
+            if ( typeof attempts === 'undefined' ) {
                 attempts = 3;
             } else {
                 attempts -= 1;
             }
 
-            if (attempts === 0 ) {
+            if ( attempts === 0 ) {
                 return;
             }
 
-            console.log(' CANT FIND cke_vB_Editor_QR_editor ', e );
-            setTimeout( function(){
-                injectKKFcode(attempts);
+            console.log( ' CANT FIND cke_vB_Editor_QR_editor ', e );
+            setTimeout( function() {
+                injectKKFcode( attempts );
             }, 2500 );
 
             return;
         }
 
         // progress holder
-        var progressHolder = document.createElement('div');
-            progressHolder.setAttribute('id', 'kkflickr_progress');
-
+        var progressHolder = document.createElement( 'div' );
+        progressHolder.setAttribute( 'id', 'kkflickr_progress' );
+        progressHolder.innerHTML = '<div id="kkflickr_loading_holder" style="display: none">&nbsp;<div id="kkflickr_loading"><span id="kkflickr_loading1"></span><span id="kkflickr_loading2"></span></div></div>';
         e.parentNode.insertBefore( progressHolder, e );
 
         // toolbar button
-        var holder = document.querySelector('#cke_top_vB_Editor_QR_editor .cke_toolbox');
-        var toolbar = document.createElement('span');
-            toolbar.setAttribute('class', 'cke_toolbar');
-            toolbar.innerHTML =
-                '<span class="cke_toolgroup">\
-                    <span class="cke_button" style="display: none" id="kkflickr_auth_btn">\
-                        Auth\
-                    </span>\
+        var holder = document.querySelector( '#cke_top_vB_Editor_QR_editor .cke_toolbox' );
+        var toolbar = document.createElement( 'span' );
+        toolbar.setAttribute( 'class', 'cke_toolbar' );
+        toolbar.innerHTML =
+            '<span class="cke_toolgroup">\
+                    <span class="cke_button" style="display: none" id="kkflickr_auth_btn"></span>\
                     <span class="cke_button" style="display: none" id="kkflickr_upload_btn">\
                         <input type="file" id="kkflickrUploadInput" multiple="multiple" accept="image/*" />\
-                        <span class="label">Upload</span>\
+                        <span class="label"> </span>\
                     </span>\
                 </span>';
 
-        holder.appendChild(toolbar);
+        holder.appendChild( toolbar );
 
-        document.getElementById('kkflickr_auth_btn').addEventListener('click', requestFrob, true);
-        var uploadBtn = document.getElementById('kkflickr_upload_btn');
+        document.getElementById( 'kkflickr_auth_btn' ).addEventListener( 'click', requestFrob, true );
+        var uploadBtn = document.getElementById( 'kkflickr_upload_btn' );
         // uploadBtn.addEventListener('click', uploadDialog, true);
-        uploadBtn.addEventListener('change', uploadDialog)
+        uploadBtn.addEventListener( 'change', uploadDialog );
 
     };
 
@@ -112,7 +110,13 @@ console.warn( '------------- flickr api loaded --------------' );
      * @return {[type]} [description]
      */
     var requestFrob = function() {
-        localStorage.setItem('kkflickr_frobRequestURL', location.href );
+        localStorage.setItem( 'kkflickr_frobRequestURL', location.href );
+
+        var textarea = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
+        if (textarea) {
+            localStorage.setItem( 'kkflickr_savedText', textarea.value );
+        }
+
         location.href = cfg.baseURL + 'auth/' + signRequest( 'perms=write' );
     };
 
@@ -123,47 +127,48 @@ console.warn( '------------- flickr api loaded --------------' );
      * @param  {[type]} progress [description]
      * @return {[type]}          [description]
      */
-    var updateProgress = function ( id, status, progress, text ) {
+    var updateProgress = function( id, status, progress, text ) {
 
         if ( typeof id === 'undefined' ) {
-            console.warn('ERROR no ID in updateProgress');
+            console.warn( 'ERROR no ID in updateProgress' );
             return;
         }
 
         var holder = document.getElementById( 'kkflickr_' + id );
         if ( holder === null ) {
 
-            holder = document.createElement('div');
-            holder.setAttribute('id', 'kkflickr_' + id );
-            holder.setAttribute('class', '_kkf');
+            holder = document.createElement( 'div' );
+            holder.setAttribute( 'id', 'kkflickr_' + id );
+            holder.setAttribute( 'class', '_kkf' );
 
-            var elName = document.createElement('span');
-                elName.setAttribute('class', 'title');
-                elName.appendChild(document.createTextNode(text));
+            var elName = document.createElement( 'span' );
+            elName.setAttribute( 'class', 'title' );
+            elName.appendChild( document.createTextNode( text ) );
 
-            var elStatus = document.createElement('span');
-                elStatus.setAttribute('class', 'status');
-                elStatus.textContent = status;
+            var elStatus = document.createElement( 'span' );
+            elStatus.setAttribute( 'class', 'status' );
+            elStatus.textContent = status;
 
-            var elProgress = document.createElement('progress');
-                elProgress.setAttribute('class', 'progress');
-                elProgress.setAttribute('max', 100);
-                elProgress.setAttribute('value', progress);
+            var elProgress = document.createElement( 'progress' );
+            elProgress.setAttribute( 'class', 'progress' );
+            elProgress.setAttribute( 'max', 100 );
+            elProgress.setAttribute( 'value', progress );
 
-            holder.appendChild(elName);
-            holder.appendChild(elStatus);
-            holder.appendChild(elProgress);
+            holder.appendChild( elName );
+            holder.appendChild( elStatus );
+            holder.appendChild( elProgress );
 
-            document.getElementById('kkflickr_progress').appendChild(holder);
-
+            var parent = document.getElementById( 'kkflickr_progress' );
+            parent.appendChild( holder );
+            document.getElementById('kkflickr_loading_holder').style.display = 'block';
 
         } else {
 
             if ( typeof progress !== 'undefined' ) {
-                holder.getElementsByClassName('progress')[0].setAttribute('value', progress);
+                holder.getElementsByClassName( 'progress' )[ 0 ].setAttribute( 'value', progress );
             }
 
-            holder.getElementsByClassName('status')[0].textContent = status;
+            holder.getElementsByClassName( 'status' )[ 0 ].textContent = status;
         }
 
 
@@ -175,50 +180,50 @@ console.warn( '------------- flickr api loaded --------------' );
      * @param  {[type]} photo [description]
      * @return {[type]}       [description]
      */
-    var uploadPhoto = function ( id, photo ) {
+    var uploadPhoto = function( id, photo ) {
 
         var resultFired = false;
-        console.log('uploading photo id=', id);
+        console.log( 'uploading photo id=', id );
 
         var formData = new FormData();
-            formData.append( 'photo', photo );
+        formData.append( 'photo', photo );
 
         // encoding params
-        var params = signRequest( 'title=' + photo.name + '&hidden=2&async=1&is_public=0&auth_token=' + cfg.token ).replace(/^\?/, '').split('&');
+        var params = signRequest( 'title=' + photo.name + '&hidden=2&async=1&is_public=0&auth_token=' + cfg.token ).replace( /^\?/, '' ).split( '&' );
 
-        for (var i = 0; i < params.length; i++) {
-            var pair = params[i].split('=');
-            formData.append( pair[0], pair[1] );
+        for ( var i = 0; i < params.length; i++ ) {
+            var pair = params[ i ].split( '=' );
+            formData.append( pair[ 0 ], pair[ 1 ] );
         }
 
         var xhr = new XMLHttpRequest();
 
         // progress indicator
-        xhr.upload.addEventListener( 'progress', function ( progress ) {
+        xhr.upload.addEventListener( 'progress', function( progress ) {
             var perc = Math.round( progress.loaded * 100 / progress.totalSize );
             console.log( ' progress = ', perc, '%' );
-            updateProgress(id, 'uploading', perc );
+            updateProgress( id, 'uploading', perc );
         }, false );
 
-        xhr.addEventListener( 'readystatechange', function ( evt ) {
+        xhr.addEventListener( 'readystatechange', function( evt ) {
 
-            if ( ! evt || ! evt.target ) {
+            if ( !evt || !evt.target ) {
                 return;
             }
 
-            if ( ! resultFired && evt.target.readyState === 4 ) {
+            if ( !resultFired && evt.target.readyState === 4 ) {
                 resultFired = true;
                 console.log( evt, evt.target.responseText );
 
                 try {
-                    var response = new DOMParser().parseFromString(evt.target.responseText, 'text/xml' );
-                    if ( response.documentElement.getAttribute('stat') === 'ok' ) {
-                        var ticket = response.getElementsByTagName('ticketid')[0].textContent;
-                        getPhotoId(id, ticket);
+                    var response = new DOMParser().parseFromString( evt.target.responseText, 'text/xml' );
+                    if ( response.documentElement.getAttribute( 'stat' ) === 'ok' ) {
+                        var ticket = response.getElementsByTagName( 'ticketid' )[ 0 ].textContent;
+                        getPhotoId( id, ticket );
                     }
 
-                } catch( e ) {
-                    console.error(e);
+                } catch ( e ) {
+                    console.error( e );
                 }
 
 
@@ -238,10 +243,8 @@ console.warn( '------------- flickr api loaded --------------' );
 
         var photos = document.getElementById( 'kkflickrUploadInput' ).files;
 
-        console.warn('AAAAA ', photos);
-
-        for (var i = 0, len = photos.length; i < len; i++) {
-            var photo = photos[i];
+        for ( var i = 0, len = photos.length; i < len; i++ ) {
+            var photo = photos[ i ];
             var id = CryptoJS.MD5( photo.name + photo.size + Date.now() ).toString();
 
             updateProgress( id, 'preparing', 0, photo.name );
@@ -259,11 +262,11 @@ console.warn( '------------- flickr api loaded --------------' );
 
         var xhr = new XMLHttpRequest();
 
-        updateProgress(id, 'getting photo URL');
+        updateProgress( id, 'getting photo URL' );
 
-        xhr.addEventListener( 'readystatechange', function ( evt ) {
+        xhr.addEventListener( 'readystatechange', function( evt ) {
 
-            if ( ! evt || ! evt.target ) {
+            if ( !evt || !evt.target ) {
                 return;
             }
 
@@ -271,35 +274,35 @@ console.warn( '------------- flickr api loaded --------------' );
 
                 try {
 
-                    var response = JSON.parse(evt.target.responseText);
+                    var response = JSON.parse( evt.target.responseText );
                     console.log( 'SIZES', response );
 
                     var ffoundRightSize = false;
 
-                    for (var i = 0, len = response.sizes.size.length; i < len; i++) {
-                        if (response.sizes.size[i].width === cfg.preferredPhotoSize1 || response.sizes.size[i].width === cfg.preferredPhotoSize2 ) {
-                            console.log('Direct photo url ', response.sizes.size[i].source );
-                            postResult( id, response.sizes.size[i].source );
+                    for ( var i = 0, len = response.sizes.size.length; i < len; i++ ) {
+                        if ( response.sizes.size[ i ].width === cfg.preferredPhotoSize1 || response.sizes.size[ i ].width === cfg.preferredPhotoSize2 ) {
+                            console.log( 'Direct photo url ', response.sizes.size[ i ].source );
+                            postResult( id, response.sizes.size[ i ].source );
                             ffoundRightSize = true;
                             break;
                         }
                     }
 
-                    if ( ! ffoundRightSize && response.sizes.size.length > 0 ) {
-                        postResult( id, response.sizes.size[0].source );
-                    } else {
-                        updateProgress( id, 'DONE' );
+                    if ( !ffoundRightSize && response.sizes.size.length > 0 ) {
+                        postResult( id, response.sizes.size[ 0 ].source );
                     }
 
-                } catch( e ) {
-                    console.error(e);
+
+
+                } catch ( e ) {
+                    console.error( e );
                 }
 
             }
 
-        });
+        } );
 
-        xhr.open( 'get', cfg.baseURL + 'rest/' + signRequest('method=flickr.photos.getSizes&photo_id='+ photoId + '&nojsoncallback=1&format=json&auth_token=' + cfg.token) , true );
+        xhr.open( 'get', cfg.baseURL + 'rest/' + signRequest( 'method=flickr.photos.getSizes&photo_id=' + photoId + '&nojsoncallback=1&format=json&auth_token=' + cfg.token ), true );
         xhr.send();
 
     };
@@ -309,12 +312,29 @@ console.warn( '------------- flickr api loaded --------------' );
      * @param  {[type]} url [description]
      * @return {[type]}     [description]
      */
-    var postResult = function ( id, url ) {
+    var postResult = function( id, url ) {
 
-        updateProgress(id, 'done');
+        updateProgress( id, 'DONE' );
 
-        var holder = document.querySelector('#cke_contents_vB_Editor_QR_editor textarea');
+        var holder = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
         holder.value += "\n" + '[IMG]' + url + '[/IMG]';
+
+        // let's remove finished items after timeout
+        setTimeout( function() {
+
+            var holder = document.getElementById( 'kkflickr_' + id );
+
+            if ( holder ) {
+                var parent = holder.parentNode;
+                parent.removeChild( holder );
+
+                if (parent.childNodes.length === 1 ) {
+                    document.getElementById('kkflickr_loading_holder').style.display = 'none';
+                }
+
+            }
+
+        }, 2000 );
 
     };
 
@@ -327,9 +347,9 @@ console.warn( '------------- flickr api loaded --------------' );
 
         var xhr = new XMLHttpRequest();
 
-        xhr.addEventListener( 'readystatechange', function ( evt ) {
+        xhr.addEventListener( 'readystatechange', function( evt ) {
 
-            if ( ! evt || ! evt.target ) {
+            if ( !evt || !evt.target ) {
                 return;
             }
 
@@ -337,7 +357,7 @@ console.warn( '------------- flickr api loaded --------------' );
 
                 try {
 
-                    var data = JSON.parse(evt.target.responseText);
+                    var data = JSON.parse( evt.target.responseText );
 
                     if ( data && data.stat === 'ok' && data.auth && data.auth.token && data.auth.token._content ) {
 
@@ -360,7 +380,7 @@ console.warn( '------------- flickr api loaded --------------' );
                         console.log( 'stored ', JSON.stringify( flickrAuth ), ' auth=', flickrAuth );
                         localStorage.setItem( 'flickrAuth', JSON.stringify( flickrAuth ) );
 
-                        var frobRequestURL = localStorage.getItem('kkflickr_frobRequestURL');
+                        var frobRequestURL = localStorage.getItem( 'kkflickr_frobRequestURL' );
                         if ( frobRequestURL ) {
                             location.href = frobRequestURL;
                         }
@@ -368,17 +388,17 @@ console.warn( '------------- flickr api loaded --------------' );
                     } else {
                         console.warn( ' error in data' );
                         injectKKFcode();
-                        showButton('kkflickr_auth_btn');
+                        showButton( 'kkflickr_auth_btn' );
                     }
 
-                } catch( e ) {
-                    console.error(e);
+                } catch ( e ) {
+                    console.error( e );
                 }
             }
 
-        });
+        } );
 
-        xhr.open( 'get', cfg.baseURL + 'rest/' + signRequest( 'method=flickr.auth.getToken&nojsoncallback=1&format=json&frob=' + frob ) , true );
+        xhr.open( 'get', cfg.baseURL + 'rest/' + signRequest( 'method=flickr.auth.getToken&nojsoncallback=1&format=json&frob=' + frob ), true );
         xhr.send();
     };
 
@@ -387,15 +407,15 @@ console.warn( '------------- flickr api loaded --------------' );
      * @param  {[type]} ticketId [description]
      * @return {[type]}          [description]
      */
-    var getPhotoId = function ( id, ticketId ) {
+    var getPhotoId = function( id, ticketId ) {
 
         var xhr = new XMLHttpRequest();
 
-        updateProgress(id, 'processing');
+        updateProgress( id, 'processing' );
 
-        xhr.addEventListener( 'readystatechange', function ( evt ) {
+        xhr.addEventListener( 'readystatechange', function( evt ) {
 
-            if ( ! evt || ! evt.target ) {
+            if ( !evt || !evt.target ) {
                 return;
             }
 
@@ -403,33 +423,33 @@ console.warn( '------------- flickr api loaded --------------' );
 
                 try {
 
-                    var response = JSON.parse(evt.target.responseText);
+                    var response = JSON.parse( evt.target.responseText );
                     console.log( response );
 
-                    if ( response.uploader.ticket[0].id === ticketId) {
+                    if ( response.uploader.ticket[ 0 ].id === ticketId ) {
 
-                        if (response.uploader.ticket[0].complete === 1 ) {
-                            console.log('DONE id=', response.uploader.ticket[0].photoid );
+                        if ( response.uploader.ticket[ 0 ].complete === 1 ) {
+                            console.log( 'DONE id=', response.uploader.ticket[ 0 ].photoid );
 
-                            getPhotoSizes(id, response.uploader.ticket[0].photoid);
+                            getPhotoSizes( id, response.uploader.ticket[ 0 ].photoid );
 
                         } else {
-                            console.log('retrying…');
-                            setTimeout(function(){
-                                getPhotoId(id, ticketId);
-                            }, 2000);
+                            console.log( 'retrying…' );
+                            setTimeout( function() {
+                                getPhotoId( id, ticketId );
+                            }, 2000 );
                         }
                     }
 
-                } catch( e ) {
-                    console.error(e);
+                } catch ( e ) {
+                    console.error( e );
                 }
 
             }
 
-        });
+        } );
 
-        xhr.open( 'get', cfg.baseURL + 'rest/' + signRequest('method=flickr.photos.upload.checkTickets&tickets='+ ticketId + '&nojsoncallback=1&format=json&auth_token=' + cfg.token) , true );
+        xhr.open( 'get', cfg.baseURL + 'rest/' + signRequest( 'method=flickr.photos.upload.checkTickets&tickets=' + ticketId + '&nojsoncallback=1&format=json&auth_token=' + cfg.token ), true );
         xhr.send();
 
     };
@@ -440,23 +460,23 @@ console.warn( '------------- flickr api loaded --------------' );
      */
     var showButton = function( id, retries ) {
         var btn = document.getElementById( id );
-        if (btn) {
+        if ( btn ) {
             btn.style.display = 'block';
         } else {
 
-            if (typeof retries === 'undefined') {
+            if ( typeof retries === 'undefined' ) {
                 retries = 10;
             } else {
                 retries -= 1;
             }
 
-            if (retries === 0 ) {
+            if ( retries === 0 ) {
                 return;
             }
 
-            setTimeout(function(){
-                showButton(id, retries);
-            }, 1500);
+            setTimeout( function() {
+                showButton( id, retries );
+            }, 1500 );
         }
     };
 
@@ -481,7 +501,18 @@ console.warn( '------------- flickr api loaded --------------' );
                 console.log( 'ffound saved auth data', savedAuth );
                 cfg.token = savedAuth.token;
                 injectKKFcode();
-                showButton('kkflickr_upload_btn');
+                showButton( 'kkflickr_upload_btn' );
+
+                // restoring saved value if any
+                var savedText = localStorage.getItem( 'kkflickr_savedText');
+                if (savedText) {
+                    localStorage.setItem( 'kkflickr_savedText', null);
+                    var textarea = document.querySelector( '#cke_contents_vB_Editor_QR_editor textarea' );
+                    if (textarea && textarea.value === '') {
+                        textarea.value = savedText;
+                    }
+                }
+
                 return;
             }
         }
@@ -489,12 +520,12 @@ console.warn( '------------- flickr api loaded --------------' );
         if ( /frob=/.test( url ) ) {
             var frob = url.replace( /.*frob=(.*?)$|\?|\&/, '$1' );
             console.log( 'GOT IT!!! FROB = ', frob );
-            getAuthToken(frob);
+            getAuthToken( frob );
 
         } else {
 
             injectKKFcode();
-            showButton('kkflickr_auth_btn');
+            showButton( 'kkflickr_auth_btn' );
         }
     };
 

@@ -5,12 +5,13 @@
   "description": "KKF",
   "version": "1.0",
   "permissions": [
-    "http://*/*"
+    "http://*.kitchenknifeforums.com/*",
+    "http://*.flickr.com/*"
   ],
   "content_scripts": [
     {
-      "matches": [ "http://*.kitchenknifeforums.com/*", "file://*", "http://gitdev:81/*" ],
-      "js": [ "jquery-2.1.0.js", "md5.js", "flickr.js" ],
+      "matches": [ "http://*.kitchenknifeforums.com/*" ],
+      "js": [ "md5.js", "flickr.js" ],
       "css" : [ "kkflickr.css"]
       }
     ]
