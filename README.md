@@ -3,4 +3,4 @@ kkflickr
 
 This is a basic Chrome Extension that allows easy inserting images from local computer using flickr upload. Flickr account is required.
 
-https://chrome.google.com/webstore/detail/fencacmcbgdmnddcemgebpehpnjgjgcc
+TODO insert link HERE

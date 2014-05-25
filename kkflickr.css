@@ -69,13 +69,12 @@
     cursor: pointer;
 }
 
-#kkflickr_upload_btn .label
+#kkflickr_upload_btn a
 {
     margin: 0;
     padding: 5px;
     border: 0px;
     width: 60px;
-    height: 12px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 50% 50%;
@@ -84,13 +83,12 @@
     display:inline-block;
 }
 
-#kkflickr_auth_btn
+#kkflickr_auth_btn a
 {
     margin: 0;
     padding: 5px;
     border: 0px;
     width: 70px;
-    height: 12px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 50% 50%;

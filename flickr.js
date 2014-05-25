@@ -7,10 +7,10 @@ console.warn( '------------- flickr api loaded --------------' );
     'use strict';
 
     var cfg = {
-        key: '1214d981477adc7e17d5c50ee0eef5bd',
-        secret: '3db6fbef55dbdda6',
-        baseURL: 'http://flickr.com/services/',
-        textareaSelector: '.texteditor textarea[role="textbox"]'
+        key: 'fe3a846ec5c392c937cf4c773417759f',
+        secret: '6c3041e58e91cf6f',
+        baseURL: 'https://flickr.com/services/',
+        textareaSelector: '.bbCodeEditorContainer textarea'
     };
 
     var settings = {};
@@ -22,8 +22,8 @@ console.warn( '------------- flickr api loaded --------------' );
      */
     var injectKKFcode = function( attempts ) {
 
-        var e = document.getElementsByClassName( 'editor' )[0];
-        var holder = document.querySelector( '.editor .cke_toolbox' );
+        var e = document.getElementsByClassName( 'redactor_box' )[0];
+        var holder = document.querySelector( '.redactor_box .redactor_toolbar' );
 
         if ( typeof e === 'undefined' || holder === null ) {
 
@@ -53,16 +53,18 @@ console.warn( '------------- flickr api loaded --------------' );
 
         // toolbar button
 
-        var toolbar = document.createElement( 'span' );
-        toolbar.setAttribute( 'class', 'cke_toolbar' );
-        toolbar.innerHTML =
-            '<span class="cke_toolgroup">\
-                    <span class="cke_button" style="display: none" id="kkflickr_auth_btn"></span>\
-                    <span class="cke_button" style="display: none" id="kkflickr_upload_btn">\
+        var toolbar = document.createElement( 'li' );
+        toolbar.setAttribute( 'class', 'redactor_btn_group' );
+        toolbar.innerHTML = '\
+                <ul>\
+                    <li style="display: none" id="kkflickr_auth_btn">\
+                        <a href="javascript:void(null);" unselectable="on" tabindex="-1"></a>\
+                    </li>\
+                    <li style="display: none" id="kkflickr_upload_btn">\
                         <input type="file" id="kkflickrUploadInput" multiple="multiple" accept="image/*" />\
-                        <span class="label"> </span>\
-                    </span>\
-                </span>';
+                        <a href="javascript:void(null);" unselectable="on" tabindex="-1"></a>\
+                    </li>\
+                </ul>';
 
         holder.appendChild( toolbar );
 
@@ -250,12 +252,14 @@ console.warn( '------------- flickr api loaded --------------' );
         var editor = document.querySelector( cfg.textareaSelector );
 
         if ( sourceMode && !editor ) {
+            console.log('changing editor');
             cfg.restoreSourceMode = true;
-            document.querySelector( '.cke_button_enhancedsource' ).click();
+            document.querySelector( '.redactor_btn_switchmode' ).click();
+            return;
         }
 
         if ( !sourceMode && editor ) {
-            document.querySelector( '.cke_button_enhancedsource' ).click();
+            document.querySelector('.bbCodeEditorContainer div a').click();
             delete cfg.restoreSourceMode;
         }
 
@@ -303,7 +307,7 @@ console.warn( '------------- flickr api loaded --------------' );
                 try {
 
                     var response = JSON.parse( evt.target.responseText );
-                    // console.log( 'SIZES', response );
+                    console.log( 'SIZES', response );
 
                     var ffoundRightSize = false;
 

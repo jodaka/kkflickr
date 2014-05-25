@@ -2,17 +2,16 @@
   "manifest_version": 2,
 
   "name": "KKFlickr",
-  "description": "KKFlickr would allow you to insert pictures from local computer to http://kitchenknifeforums.com with just few easy clicks",
-  "version": "1.4",
+  "description": "KKFlickr allows you to easy upload pictures from local computer to http://kitchenknifefora.com using Flickr as storage",
+  "version": "1.5",
   "permissions": [
-    "http://*.kitchenknifeforums.com/*",
-    "http://*.flickr.com/*",
+    "http://*.kitchenknifefora.com/*",
     "https://*.flickr.com/*",
     "storage"
   ],
   "content_scripts": [
     {
-      "matches": [ "http://*.kitchenknifeforums.com/*" ],
+      "matches": [ "http://*.kitchenknifefora.com/*" ],
       "js": [ "md5.js", "flickr.js" ],
       "css": [ "kkflickr.css" ]
       }
