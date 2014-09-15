@@ -3,10 +3,9 @@
 
   "name": "KKFlickr",
   "description": "KKFlickr would allow you to insert pictures from local computer to http://kitchenknifeforums.com with just few easy clicks",
-  "version": "1.4",
+  "version": "1.5",
   "permissions": [
     "http://*.kitchenknifeforums.com/*",
-    "http://*.flickr.com/*",
     "https://*.flickr.com/*",
     "storage"
   ],

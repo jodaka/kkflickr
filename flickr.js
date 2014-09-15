@@ -9,7 +9,7 @@ console.warn( '------------- flickr api loaded --------------' );
     var cfg = {
         key: '1214d981477adc7e17d5c50ee0eef5bd',
         secret: '3db6fbef55dbdda6',
-        baseURL: 'http://flickr.com/services/',
+        baseURL: 'https://flickr.com/services/',
         textareaSelector: '.texteditor textarea[role="textbox"]'
     };
 
