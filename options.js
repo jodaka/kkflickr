@@ -15,8 +15,6 @@
 
     }, function( newConfig ) {
 
-        console.log( 222, newConfig );
-
         cfg = newConfig;
         applySettings( cfg );
         setupHandlers();
@@ -95,9 +93,7 @@
 
     var saveSettings = function() {
 
-        chrome.storage.sync.set( cfg, function() {
-            console.log( 'settings saved', cfg );
-        } );
+        chrome.storage.sync.set( cfg );
     };
 
     var addTagNode = function(tag) {
@@ -115,14 +111,13 @@
             }
         }
 
-        document.querySelector( "input[type=radio][value='" + cfg.pictureSize + "']" ).checked = 'checked';
-        console.log( 555, "input[type=radio][value='" + cfg.pictureSize + "']" );
+        document.querySelector( 'input[type=radio][value=\'' + cfg.pictureSize + '\']' ).checked = 'checked';
 
         if ( cfg.allowFullSize ) {
             document.getElementById( 'allowFullSize' ).checked = 'checked';
         }
 
-        document.querySelector( "input[type=radio][value='" + cfg.isPrivate + "']" ).checked = 'checked';
+        document.querySelector( 'input[type=radio][value=\'' + cfg.isPrivate + '\']' ).checked = 'checked';
 
         if ( cfg.allowFullSize ) {
             document.getElementById( 'allowFullSize' ).checked = 'checked';

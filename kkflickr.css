@@ -105,6 +105,7 @@
     bottom: 0;
     right: 0;
     opacity:0;
+    width: 100%;
 }
 
 #kkflickr_loading {
